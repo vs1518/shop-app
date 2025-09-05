@@ -4,6 +4,7 @@ import { ProductService } from '../services/product.service';
 import { ProductCardComponent } from './product-card.component';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../cart/services/cart.service';
+import { NotificationService } from '../../../shared/services/notification.service';
 
 @Component({
   selector: 'app-product-grid',
@@ -27,7 +28,7 @@ import { CartService } from '../../cart/services/cart.service';
   <!-- Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     @for (p of productService.filtered(); track p.id) {
-      <app-product-card [product]="p" (add)="cart.add(p)"></app-product-card>
+      <app-product-card [product]="p" (add)="addToCart(p)"></app-product-card>
     }
   </div>
 </section>
@@ -36,9 +37,15 @@ import { CartService } from '../../cart/services/cart.service';
 export class ProductGridComponent {
   productService = inject(ProductService);
   cart = inject(CartService);
+  notify = inject(NotificationService);
 
   onSearch(e: Event) {
     const v = (e.target as HTMLInputElement).value ?? '';
     this.productService.setQuery(v);
+  }
+
+   addToCart(p: any) {
+    this.cart.add(p);
+    this.notify.success(`« ${p.name} » a été ajouté au panier`);
   }
 }
