@@ -2,11 +2,21 @@ import { ApplicationConfig } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { mockInterceptor } from './core/interceptors/mock.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { mockApiInterceptor } from './core/interceptors/mock-api.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([mockInterceptor]))
+    provideHttpClient(
+      withInterceptors([
+        loadingInterceptor,  // 1) compte ttes requêtes
+        authInterceptor,     // 2) ajoute Authorization si connecté
+        mockApiInterceptor,  // 3) sert les /api/* avec délai
+        errorInterceptor     // 4) notifie les erreurs
+      ])
+    )
   ],
 };

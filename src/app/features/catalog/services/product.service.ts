@@ -1,8 +1,11 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
+import { Injectable, computed, signal, inject } from '@angular/core';
 import { Product } from '../models/product.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
+  private http = inject(HttpClient);
+
   private _products = signal<Product[]>([]);
   products = this._products.asReadonly();
 
@@ -13,22 +16,22 @@ export class ProductService {
     const q = this._query().toLowerCase().trim();
     if (!q) return this._products();
     return this._products().filter(p =>
-      p.name.toLowerCase().includes(q) || p.tags?.some(t => t.includes(q))
+      p.name.toLowerCase().includes(q) || p.tags?.some(t => t.toLowerCase().includes(q))
     );
   });
 
   constructor() {
-    // mock initial via effect (peut venir d'un fetch HTTP)
-    effect(() => {
-      if (this._products().length === 0) {
-        this._products.set([
-          { id: 'p1', name: 'Sneakers Air', price: 129, imageUrl: 'https://picsum.photos/seed/p1/600/600', rating: 4.5, tags: ['shoes', 'sport'] },
-          { id: 'p2', name: 'Casque Sans Fil', price: 89, imageUrl: 'https://picsum.photos/seed/p2/600/600', rating: 4.2, tags: ['audio'] },
-          { id: 'p3', name: 'Sac à Dos Pro', price: 59, imageUrl: 'https://picsum.photos/seed/p3/600/600', rating: 4.0, tags: ['bag'] }
-        ]);
-      }
+    // 🔄 Récupère depuis la mock API (delay via interceptor)
+    this.http.get<Product[]>('/api/products').subscribe({
+      next: products => this._products.set(products),
+      error: () => this._products.set([]),
     });
   }
 
   setQuery(v: string) { this._query.set(v); }
+
+  getById(id: number | string): Product | null {
+    const s = String(id);
+    return this._products().find(p => String(p.id) === s) ?? null;
+  }
 }
