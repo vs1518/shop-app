@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'catalog', pathMatch: 'full' },
   {
@@ -9,6 +10,14 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadChildren: () => import('./features/cart/routes').then(m => m.CART_ROUTES)
+  },
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/routes').then(m => m.AUTH_ROUTES)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/routes').then(m => m.ADMIN_ROUTES)
   },
   { path: '**', redirectTo: 'catalog' }
 ];
