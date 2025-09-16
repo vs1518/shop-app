@@ -1,13 +1,13 @@
+// src/app/app.component.spec.ts
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],                     // composant standalone
-      providers: [provideRouter([]), provideHttpClient()] // Router + HttpClient si besoin
+      imports: [AppComponent],          // composant standalone
+      providers: [provideRouter([])],   // ✅ fournit Router + ActivatedRoute
     }).compileComponents();
   });
 
@@ -20,7 +20,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const el: HTMLElement = fixture.nativeElement;
-    // adapte l’assertion à ton header réel
     expect(el.querySelector('header a')?.textContent).toContain('ShopApp');
   });
 });

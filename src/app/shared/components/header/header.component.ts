@@ -17,8 +17,10 @@ import { AuthService } from '../../../features/auth/services/auth.service';
       <li><a routerLink="/catalog" class="hover:text-blue-600">Catalogue</a></li>
 
       @if (auth.isAdmin()) {
-        <li><a routerLink="/admin" class="hover:text-blue-600">Admin</a></li>
-      }
+      <li><a routerLink="/admin" class="hover:text-blue-600">Admin</a></li>
+      <li><a routerLink="/categories" class="hover:text-blue-600">Catégories</a></li>
+    }
+
 
       <li>
         <a routerLink="/cart" class="relative inline-flex items-center" aria-label="Ouvrir le panier">
