@@ -12,10 +12,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([
-        loadingInterceptor,  // 1) compte ttes requêtes
-        authInterceptor,     // 2) ajoute Authorization si connecté
-        mockApiInterceptor,  // 3) sert les /api/* avec délai
-        errorInterceptor     // 4) notifie les erreurs
+        loadingInterceptor,
+        authInterceptor,
+        mockApiInterceptor,
+        errorInterceptor
       ])
     )
   ],

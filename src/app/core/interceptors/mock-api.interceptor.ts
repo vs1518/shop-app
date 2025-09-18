@@ -40,11 +40,6 @@ export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {
     return prod ? respond(prod) : respond({ message: 'Not found' }, 404);
   }
 
-  // POST /api/orders  (exemple)
-  if (req.method === 'POST' && req.url === '/api/orders') {
-    return respond({ id: Date.now(), status: 'ok' }, 201);
-  }
-
   // GET /api/categories?query=...
 if (req.method === 'GET' && req.url.startsWith('/api/categories')) {
   const url = new URL('http://x' + req.url); // hack URL
@@ -126,7 +121,7 @@ if (req.method === 'POST' && req.url === '/api/categories') {
   }
 }
 
-// --- ORDERS MOCK ---
+// --- ORDERS MOCK --- (avec persistance + logs)
 type OrderItem = { productId: string; name: string; unitPrice: number; qty: number };
 type Address   = { line1: string; line2?: string; city: string; postalCode: string; country: string };
 type Order     = {
@@ -135,18 +130,31 @@ type Order     = {
   createdAt: string; status: 'paid' | 'pending' | 'cancelled';
 };
 
-let ORDERS: Order[] = [];
+const ORDERS_LS_KEY = 'mock.orders';
+
+function loadOrders(): Order[] {
+  try {
+    const raw = localStorage.getItem(ORDERS_LS_KEY);
+    return raw ? JSON.parse(raw) as Order[] : [];
+  } catch { return []; }
+}
+function saveOrders(list: Order[]) {
+  try { localStorage.setItem(ORDERS_LS_KEY, JSON.stringify(list)); } catch {}
+}
+
+let ORDERS: Order[] = loadOrders();
 
 // GET /api/orders (admin)
 if (req.method === 'GET' && req.url === '/api/orders') {
-  return respond(ORDERS, 300);
+  console.log('[mock-api] GET /api/orders ->', ORDERS.length);
+  return respond(ORDERS, 200, 300);
 }
 
 // GET /api/orders/:id
 {
-  const m = req.url.match(/^\/api\/orders\/([^/]+)$/);
-  if (req.method === 'GET' && m) {
-    const ord = ORDERS.find(o => o.id === m[1]);
+  const m2 = req.url.match(/^\/api\/orders\/([^/]+)$/);
+  if (req.method === 'GET' && m2) {
+    const ord = ORDERS.find(o => o.id === m2[1]);
     return ord ? respond(ord, 200, 250) : respond({ message: 'Not found' }, 404);
   }
 }
@@ -165,7 +173,9 @@ if (req.method === 'POST' && req.url === '/api/orders') {
     createdAt: new Date().toISOString(), status: 'paid'
   };
   ORDERS = [order, ...ORDERS];
-  return respond(order, 201, 500);
+  saveOrders(ORDERS);
+  console.log('[mock-api] POST /api/orders -> saved id', id);
+  return respond(order, 201, 400);
 }
 
 

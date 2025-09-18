@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+// src/app/features/orders/components/checkout.component.ts
+import { Component, inject, signal, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -6,6 +7,8 @@ import { CartService } from '../../cart/services/cart.service';
 import { AuthService } from '../../auth/services/auth.service';
 import { OrderService } from '../services/order.service';
 import { frenchPostalCodeValidator, phoneValidator } from '../validators/postal-phone.validators';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { startWith, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-checkout',
@@ -117,7 +120,10 @@ import { frenchPostalCodeValidator, phoneValidator } from '../validators/postal-
 </section>
   `
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
+
+  private static readonly LS_KEY = 'checkout_last_address';
+
   fb = inject(FormBuilder);
   cart = inject(CartService);
   auth = inject(AuthService);
@@ -137,6 +143,23 @@ export class CheckoutComponent {
     postalCode:['', [frenchPostalCodeValidator()]],
     country:   ['France', Validators.required],
   });
+
+  private formValueSig = toSignal(
+    this.form.valueChanges.pipe(startWith(this.form.getRawValue()), debounceTime(300)),
+    { initialValue: this.form.getRawValue() }
+  );
+
+  private persistEff = effect(() => {
+    const v = this.formValueSig();
+    localStorage.setItem(CheckoutComponent.LS_KEY, JSON.stringify(v));
+  });
+
+  ngOnInit(): void {
+    try {
+      const raw = localStorage.getItem(CheckoutComponent.LS_KEY);
+      if (raw) this.form.patchValue(JSON.parse(raw), { emitEvent: false });
+    } catch {}
+  }
 
   async submit() {
     if (this.form.invalid) return;
@@ -165,6 +188,7 @@ export class CheckoutComponent {
 
     try {
       const order = await this.orders.placeOrder(payload);
+      localStorage.removeItem(CheckoutComponent.LS_KEY);
       this.cart.clear();
       this.router.navigate(['/checkout', 'success', order.id]);
     } finally {

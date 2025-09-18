@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { CheckoutComponent } from './components/checkout.components';
+import { CheckoutComponent } from './components/checkout.component';
 import { OrderSuccessComponent } from './components/order-success.component';
 import { authGuard } from '../auth/guards/auth.guard';
 import { nonEmptyCartGuard } from './guards/non-empty-cart.guard';
