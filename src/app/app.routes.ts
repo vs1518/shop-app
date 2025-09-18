@@ -23,5 +23,10 @@ export const routes: Routes = [
   {
     path: 'categories',
   loadChildren: () => import('./features/categories/routes').then(m => m.CATEGORIES_ROUTES)
-  }
+  },
+  {
+  path: 'checkout',
+  loadChildren: () => import('./features/orders/routes').then(m => m.ORDERS_ROUTES)
+},
+
   ];

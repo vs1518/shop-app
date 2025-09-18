@@ -126,6 +126,48 @@ if (req.method === 'POST' && req.url === '/api/categories') {
   }
 }
 
+// --- ORDERS MOCK ---
+type OrderItem = { productId: string; name: string; unitPrice: number; qty: number };
+type Address   = { line1: string; line2?: string; city: string; postalCode: string; country: string };
+type Order     = {
+  id: string; userId: string; email: string; phone?: string;
+  items: OrderItem[]; total: number; address: Address;
+  createdAt: string; status: 'paid' | 'pending' | 'cancelled';
+};
+
+let ORDERS: Order[] = [];
+
+// GET /api/orders (admin)
+if (req.method === 'GET' && req.url === '/api/orders') {
+  return respond(ORDERS, 300);
+}
+
+// GET /api/orders/:id
+{
+  const m = req.url.match(/^\/api\/orders\/([^/]+)$/);
+  if (req.method === 'GET' && m) {
+    const ord = ORDERS.find(o => o.id === m[1]);
+    return ord ? respond(ord, 200, 250) : respond({ message: 'Not found' }, 404);
+  }
+}
+
+// POST /api/orders
+if (req.method === 'POST' && req.url === '/api/orders') {
+  const body = req.body as Omit<Order, 'id' | 'createdAt' | 'status'>;
+  if (!body || !Array.isArray(body.items) || body.items.length === 0) {
+    return respond({ message: 'Cart is empty' }, 400);
+  }
+  const id = 'o' + (Date.now().toString(36));
+  const order: Order = {
+    id,
+    userId: body.userId, email: body.email, phone: body.phone,
+    items: body.items, total: body.total, address: body.address,
+    createdAt: new Date().toISOString(), status: 'paid'
+  };
+  ORDERS = [order, ...ORDERS];
+  return respond(order, 201, 500);
+}
+
 
   return respond({ message: 'Not found' }, 404);
 };

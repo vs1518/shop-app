@@ -1,5 +1,7 @@
+// src/app/features/cart/components/cart-panel.component.ts
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { CartService } from '../services/cart.service';
 
 @Component({
@@ -41,7 +43,12 @@ import { CartService } from '../services/cart.service';
           <span>Total</span>
           <span>{{ cart.totalPrice() | number:'1.0-0' }} €</span>
         </div>
-        <button class="w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700">Commander</button>
+
+        <!-- ✅ Lien vers /checkout -->
+        <button class="w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                (click)="checkout()">
+          Commander
+        </button>
       </aside>
     </div>
   }
@@ -50,6 +57,19 @@ import { CartService } from '../services/cart.service';
 })
 export class CartPanelComponent {
   cart = inject(CartService);
-  inc(id: string) { this.cart.setQty(id, (this.cart.items().find(i => i.product.id === id)?.qty ?? 0) + 1); }
-  dec(id: string) { this.cart.setQty(id, (this.cart.items().find(i => i.product.id === id)?.qty ?? 0) - 1); }
+  private router = inject(Router);
+
+  inc(id: string) {
+    const cur = this.cart.items().find(i => i.product.id === id)?.qty ?? 0;
+    this.cart.setQty(id, cur + 1);
+  }
+
+  dec(id: string) {
+    const cur = this.cart.items().find(i => i.product.id === id)?.qty ?? 0;
+    this.cart.setQty(id, cur - 1);
+  }
+
+  checkout() {
+    this.router.navigate(['/checkout']);
+  }
 }
