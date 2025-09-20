@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../models/product.model';
 
-@Component({
+@Component({ 
   selector: 'app-product-card',
   standalone: true,
   imports: [CommonModule],
@@ -17,7 +17,9 @@ import { Product } from '../models/product.model';
     <div class="text-sm text-gray-500">{{ product.rating }} ★</div>
     <div class="text-lg font-bold">{{ product.price | number:'1.0-0' }} €</div>
     <button class="w-full py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+            data-testid="add-btn"
             (click)="add.emit(product)">
+
       Ajouter au panier
     </button>
   </div>
