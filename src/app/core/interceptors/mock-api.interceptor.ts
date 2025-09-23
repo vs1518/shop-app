@@ -16,12 +16,12 @@ interface MockProduct {
 }
 
 const PRODUCTS: MockProduct[] = [
-  { id: 'p1', name: 'Sneakers Air',   price: 129, imageUrl: 'https://picsum.photos/seed/p1/600/600', rating: 4.5, tags: ['shoes','sport'] },
-  { id: 'p2', name: 'Casque Sans Fil', price: 89,  imageUrl: 'https://picsum.photos/seed/p2/600/600', rating: 4.2, tags: ['audio'] },
-  { id: 'p3', name: 'Sac à Dos Pro',   price: 59,  imageUrl: 'https://picsum.photos/seed/p3/600/600', rating: 4.0, tags: ['bag'] },
-  { id: 'p4', name: 'Adidas Ultraboost',   price: 179, imageUrl: 'https://picsum.photos/seed/p4/600/600', rating: 4.5, tags: ['shoes','sport'] },
-  { id: 'p5', name: 'New Balance 550 (White/Green)', price: 200,  imageUrl: 'https://picsum.photos/seed/p5/600/600', rating: 4.4, tags: ['sport'] },
-  { id: 'p6', name: 'Bose QuietComfort 45',   price: 150,  imageUrl: 'https://picsum.photos/seed/p6/600/600', rating: 5.0, tags: ['earphones'] },
+  { id: 'p1', name: 'Sneakers Air',   price: 129, imageUrl: 'https://images.unsplash.com/photo-1602231379593-b85a472e3c99?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 4.5, tags: ['shoes','sport'] },
+  { id: 'p2', name: 'Casque Sans Fil', price: 89,  imageUrl: 'https://plus.unsplash.com/premium_photo-1679913793289-d1ba3b9b0187?q=80&w=968&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 4.2, tags: ['audio'] },
+  { id: 'p3', name: 'Sac à Dos Pro',   price: 159,  imageUrl: 'https://images.unsplash.com/photo-1736952323775-75714e0fdff5?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 4.0, tags: ['bag'] },
+  { id: 'p4', name: 'Adidas Ultraboost',   price: 179, imageUrl: 'https://images.unsplash.com/photo-1613972798759-e677d3fb640f?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 4.5, tags: ['shoes','sport'] },
+  { id: 'p5', name: 'New Balance 550 (White/Green)', price: 200,  imageUrl: 'https://images.unsplash.com/photo-1606890542452-aa022b9a15aa?q=80&w=928&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 4.4, tags: ['sport'] },
+  { id: 'p6', name: 'Bose QuietComfort 45',   price: 450,  imageUrl: 'https://images.unsplash.com/photo-1705090212627-004b20f6a0fb?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', rating: 5.0, tags: ['earphones'] },
 ];
 
 // ============================================================================
